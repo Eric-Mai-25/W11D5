@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from 'react-router-dom';
-import { showItem } from "../store/items";
+import { deleteItem, showItem } from "../store/items";
 
 
 const PokemonItems = ({ pokemon, setEditItemId }) => {
@@ -18,6 +18,10 @@ const PokemonItems = ({ pokemon, setEditItemId }) => {
   // debugger
   if (!items) {
     return null;
+  }
+  const handleDeleteClick = (e) => {
+    e.preventDefault()
+    dispatch(deleteItem(e.target.value, pokemonId))
   }
 
   return items.map((item) => (
@@ -41,7 +45,7 @@ const PokemonItems = ({ pokemon, setEditItemId }) => {
       )}
       {pokemon.captured && (
         <td className="centered">
-          <button>
+          <button onClick={handleDeleteClick} value={item.id}>
             Delete
           </button>
         </td>

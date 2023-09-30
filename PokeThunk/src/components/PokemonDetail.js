@@ -5,12 +5,14 @@ import PokemonItems from './PokemonItems';
 import EditPokemonForm from './EditPokemonForm';
 import ItemForm from './ItemForm';
 import { showPokemon } from '../store/pokemon';
+import AddItemForm from './AddItemForm';
 
 const PokemonDetail = () => {
   const { pokemonId } = useParams();
   const pokemon = useSelector(state => state.pokemon[pokemonId]);
   const [showEditPokeForm, setShowEditPokeForm] = useState(false);
   const [editItemId, setEditItemId] = useState(null);
+  const [addItemId, setAddItemId] = useState(null)
 
   const dispatch = useDispatch()
   
@@ -25,7 +27,7 @@ const PokemonDetail = () => {
   }
 
   let content = null;
-
+ console.log(addItemId)
   if (editItemId) {
     content = (
       <ItemForm 
@@ -38,6 +40,13 @@ const PokemonDetail = () => {
       <EditPokemonForm 
         pokemon={pokemon} 
         hideForm={() => setShowEditPokeForm(false)} 
+      />
+    );
+  } else if (addItemId) {
+    content = (
+      <AddItemForm 
+        itemId={addItemId} 
+        hideForm={() => setAddItemId(null)} 
       />
     );
   } else {
@@ -71,7 +80,7 @@ const PokemonDetail = () => {
         <div>
           <h2>
             Items 
-            <button> + </button>
+            <button onClick={()=> setAddItemId(pokemonId)}> + </button>
           </h2>
           <table>
             <thead>

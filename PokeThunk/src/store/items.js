@@ -51,6 +51,35 @@ export const updateItem = (payload, itemId) => async dispatch =>{
   }
 }
 
+export const deleteItem = (itemId, pokemonId) => async dispatch =>{
+  const response = await fetch(`/api/items/${itemId}`,{
+    method: 'DELETE',
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }})
+
+  if (response.ok){
+    const pokeItem = await response.json()
+    dispatch(remove(pokeItem.id, pokemonId))
+  }
+}
+
+export const createItem = (payload, pokemonId) => async dispatch =>{
+  const response = await fetch(`/api/pokemon/${pokemonId}/items`,{
+    method: 'POST',
+    body: JSON.stringify(payload),
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }})
+
+  if (response.ok){
+    const pokeItem = await response.json()
+    dispatch(add(pokeItem))
+  }
+}
+
 const itemsReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOAD_ITEMS: 
@@ -67,6 +96,10 @@ const itemsReducer = (state = initialState, action) => {
       delete newState[action.itemId];
       return newState;
     case ADD_ITEM:
+      return {
+        ...state,
+        [action.item.id]: action.item
+      };
     case UPDATE_ITEM: 
       return {
         ...state,
